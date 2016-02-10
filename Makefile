@@ -1,21 +1,20 @@
-#libxml # cp -r $SDK/usr/include/libxml2/libxml/ $SDK/usr/include/libxml
+LIBRARY_NAME = libitrace
 
-BIN = /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin
-GCC_BIN = $(BIN)/gcc
-#GCC = $(GCC_BASE) -arch armv6
-GCC = $(GCC_BASE) -arch armv7
-GCC_NATIVE = gcc
-SDK=/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/
+libitrace_FILES = main.m utils.m crc32.m
+libitrace_LIBRARIES = substrate xml2
 
-CFLAGS = 
-GCC_BASE = $(GCC_BIN) -Os $(CFLAGS) -Wimplicit -isysroot $(SDK) -F$(SDK)System/Library/Frameworks -F$(SDK)System/Library/PrivateFrameworks
-GCC_UNIVERSAL = $(GCC_BASE) -arch armv6 -arch armv7
+SDK=`xcrun --sdk iphoneos --show-sdk-path`
 
-all: itrace.dylib
-mac:
-	gcc -dynamiclib -lsubstrate -lxml2 -framework Foundation -o itrace_mac.dylib main.c utils.c
-itrace.dylib:
-	$(GCC_UNIVERSAL) -dynamiclib -lsubstrate -lxml2 -framework Foundation -o itrace.dylib main.c utils.c crc32.c
+export TARGET = iphone:clang
+export ARCHS = armv7s
+export TARGET_IPHONEOS_DEPLOYMENT_VERSION = 3.0
+export TARGET_IPHONEOS_DEPLOYMENT_VERSION_armv7s = 6.0
+export TARGET_IPHONEOS_DEPLOYMENT_VERSION_arm64 = 7.0
+export ADDITIONAL_CFLAGS = -D_GNU_SOURCE -DSUPER_SECURE -DIS_MAC=1 -I$(SDK)/usr/include/libxml2
+export GO_EASY_ON_ME = 1
 
-clean:
-	rm -f *.o itrace.dylib
+include theos/makefiles/common.mk
+include $(THEOS_MAKE_PATH)/library.mk
+
+internal-stage::
+	$(ECHO_NOTHING)etc="$(THEOS_STAGING_DIR)/etc";

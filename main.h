@@ -146,9 +146,6 @@ void itrace_output( char* output , ... );
 void output_trace_start( context* p_contextfu , char* p_caller, char* p_classname , char* p_method );
 void output_trace_end( context* p_contextfu );
 
-//fufufu teh warning ;)
-void NSLog( char* str, ... );
-
 /*****************************************************************************\
 |******************************* global vars *********************************|
 \*****************************************************************************/
